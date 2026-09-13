@@ -1,0 +1,16 @@
+#!/bin/bash
+
+SCRIPTPATH="$(
+  cd "$(dirname "$0")"
+  pwd -P
+)"
+
+leftwm command "UnloadTheme"
+
+if command -v eww >/dev/null 2>&1; then
+  eww kill &
+elif command -v /usr/bin/eww >/dev/null 2>&1; then
+  /usr/bin/eww kill &
+fi
+
+rm ~/.config/eww

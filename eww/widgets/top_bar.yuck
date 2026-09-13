@@ -1,0 +1,9 @@
+(deflisten wm-tags "./scripts/getleftwmstate.sh")
+
+(defwidget workspaces []
+  (literal
+    :content wm-tags))
+
+(defwidget top_bar []
+  (box (workspaces)))
+

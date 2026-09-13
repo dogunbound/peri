@@ -1,0 +1,26 @@
+(box
+    :orientation "v"
+	:halign "center"
+    :halign "center"
+    :valign "start"
+{% for tag in workspace.tags %}
+	{% assign class = "workspace" %}
+	{% if tag.busy %}
+		{% assign class = " workspace-busy" %}
+	{% endif %}
+	{% if tag.focused %}
+		{% assign class = class | append: " workspace-focused" %}
+	{% endif %}
+
+	(button
+		:class "workspace {{ class }}"
+		:width "32"
+		:height "32"
+		:onclick "leftwm command 'GoToTag {{ tag.index  | plus: 1}} false'"
+		(label
+			:text "{{ tag.name }}"
+			:limit-width "4"
+			:justify "center"
+			:lines "1"))
+{% endfor %}
+)

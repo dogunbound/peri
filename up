@@ -1,0 +1,26 @@
+#!/bin/bash
+export SCRIPTPATH="$(
+  cd "$(dirname "$0")"
+  pwd -P
+)"
+
+if [ -f "/tmp/leftwm-theme-down" ]; then
+  /tmp/leftwm-theme-down
+  rm /tmp/leftwm-theme-down
+fi
+ln -s $SCRIPTPATH/down /tmp/leftwm-theme-down
+ln -s $SCRIPTPATH/eww/ ~/.config/
+export XDG_CONFIG_HOME=~/.config/
+
+if command -v eww >/dev/null 2>&1; then
+  eww daemon &
+  eww open peri_bar
+elif command -v /usr/bin/eww >/dev/null 2>&1; then
+  /usr/bin/eww daemon &
+  /usr/bin/eww open peri_bar
+else
+  echo "eww could not be found. Please symlink the eww binary into /usr/bin/" >>$HOME/LEFTWM-THEME-PERI-WARN
+fi
+
+leftwm command "LoadTheme $SCRIPTPATH/theme.ron"
+leftwm command "LoadTheme $SCRIPTPATH/theme.toml"

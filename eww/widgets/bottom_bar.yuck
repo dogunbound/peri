@@ -1,0 +1,56 @@
+; Sound Widget
+(deflisten is_system_muted "./scripts/is_system_muted.sh")
+
+(defwidget sound []
+  (button
+    :class "bottom-bar-hover"
+    (image
+      :image-width 26
+      :image-height 26
+      :path {is_system_muted == "false" ?
+        "./assets/sound_icon.png" :
+        "./assets/sound_muted_icon.png"})))
+
+; Calendar Popup
+(defpoll current_year :interval "1m" "date +'%Y'")
+(defpoll current_month :interval "1m" "date +'%m'")
+(defpoll current_day :interval "1m" "date +'%d'")
+
+(defwindow calender_popup
+  :monitor 0
+  :geometry
+    (geometry
+      :anchor "left bottom"
+      :x "42px"
+      :y "-2px")
+  :stacking "fg"
+  :windowtype "dock"
+  :wm-ignore true
+  (box
+    :class "calendar-window"
+    (calendar
+      :day current_day
+      :month current_month
+      :year current_year
+      :show-day-names true)))
+
+; Clock Widget
+(defpoll hour :interval "1s" "date '+%H'")
+(defpoll min :interval "1s" "date '+%M'")
+
+(defwidget time []
+  (button
+    :class "bottom-bar-hover"
+    :onclick "eww open --toggle calender_popup"
+    (box
+      :orientation "v"
+      (box hour)
+      (box min))))
+
+; Bottom bar 
+(defwidget bottom_bar []
+  (box
+    :valign "end"
+    :orientation "v"
+    (sound)
+    (time)))

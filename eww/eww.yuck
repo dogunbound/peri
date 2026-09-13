@@ -1,0 +1,29 @@
+(include "./widgets/top_bar.yuck")
+(include "./widgets/bottom_bar.yuck")
+
+(defwidget middle_bar []
+  (box))
+
+(defwidget bar []
+  (centerbox
+    :class "bar"
+    :orientation "v"
+    (top_bar)
+    (middle_bar)
+    (bottom_bar)))
+
+; Window
+(defwindow peri_bar
+  :monitor 0
+  :geometry
+    (geometry
+      :width "48px"
+      :height "100%"
+      :anchor "left center")
+  :stacking "bg"
+  :reserve
+    (struts
+      :distance "48px"
+      :side "left")
+  :windowtype "dock"
+  (bar))

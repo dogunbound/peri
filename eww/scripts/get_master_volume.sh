@@ -1,19 +1,17 @@
 #!/bin/bash
 shopt -s nocasematch
 
-print_mute_state() {
-  if pactl get-sink-mute @DEFAULT_SINK@ 2>/dev/null | grep -q "Mute: yes"; then
-    echo "true"
-  else
-    echo "false"
-  fi
+print_volume() {
+  local v
+  v=$(pactl get-sink-volume @DEFAULT_SINK@ 2>/dev/null | grep -o '[0-9]\+%' | head -1 | tr -d '%')
+  echo "${v:-0}"
 }
 
 last=""
 
 emit_if_changed() {
   local v
-  v=$(print_mute_state)
+  v=$(print_volume)
   if [[ $v != "$last" ]]; then
     last=$v
     printf '%s\n' "$last"

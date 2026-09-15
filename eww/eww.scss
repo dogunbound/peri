@@ -67,3 +67,37 @@ calendar:selected {
 calendar:indeterminate {
   color: rgba($text, 0.5);
 }
+
+.volume-mixer-window {
+  background-color: $background;
+  border: solid 4px $text;
+  padding: 16px 8px 4px 0px;
+}
+
+.mixer-row {
+  padding: 8px;
+}
+
+.mixer-name {
+  color: $text;
+}
+
+.mixer-scale {
+  min-height: 150px;
+  min-width: 16px;
+  padding-bottom: 16px;
+}
+
+.mixer-scale trough {
+  background-color: $black;
+}
+
+.mixer-scale highlight {
+  background-color: $hover;
+}
+
+.mixer-scale slider {
+  background-color: $text;
+  min-width: 12px;
+  min-height: 12px;
+}

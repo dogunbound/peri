@@ -1,12 +1,93 @@
 ; Sound Widget
 (deflisten is_system_muted "./scripts/is_system_muted.sh")
+(deflisten master_volume :initial "0" "./scripts/get_master_volume.sh")
+(deflisten sink_inputs :initial "[]" "./scripts/get_sink_inputs.sh")
+
+; Volume Mixer
+(defwidget mixer_row [data]
+  (box
+    :orientation "h"
+    :class "mixer-row"
+    (label
+      :valign "start"
+      :class "mixer-name"
+      :markup {jq('"${data.name}"', 'gsub("&";"&amp;") | gsub("<";"&lt;") | gsub(">";"&gt;") | .[0:12] | explode | map([.] | implode) | join("\\n")', 'r')})
+    (box
+      :orientation "v"
+      :space-evenly false
+      (scale
+        :class "mixer-scale"
+        :value {data.volume}
+        :min 0
+        :max 100
+        :flipped true
+        :orientation "v"
+        :onchange "pactl set-sink-input-volume ${data.index} {}%")
+      (button
+        :class "bottom-bar-hover"
+        :onclick "pactl set-sink-input-mute ${data.index} toggle"
+        (image
+          :image-width 20
+          :image-height 20
+          :path {data.muted ?
+            "./assets/sound_muted_icon.png" :
+            "./assets/sound_icon.png"})))))
+
+(defwidget master_mixer []
+  (box
+    :orientation "h"
+    :class "mixer-row"
+    (label
+      :valign "start"
+      :class "mixer-name"
+      :markup {jq('"Master"', 'explode | map([.] | implode) | join("\\n")', 'r')})
+    (box
+      :orientation "v"
+      :space-evenly false
+      (scale
+        :class "mixer-scale"
+        :value master_volume
+        :min 0
+        :max 100
+        :orientation "v"
+        :flipped true
+        :onchange "pactl set-sink-volume @DEFAULT_SINK@ {}%")
+      (button
+        :class "bottom-bar-hover"
+        :onclick "pactl set-sink-mute @DEFAULT_SINK@ toggle"
+        (image
+          :image-width 20
+          :image-height 20
+          :path {is_system_muted == "false" ?
+            "./assets/sound_icon.png" :
+            "./assets/sound_muted_icon.png"})))))
+
+; Volume Mixer Window
+(defwindow volume_mixer
+  :monitor 0
+  :geometry
+    (geometry
+      :anchor "left bottom"
+      :x "42px"
+      :y "-2px")
+  :stacking "fg"
+  :windowtype "dock"
+  :wm-ignore true
+  (box
+    :class "volume-mixer-window"
+    (box
+      :orientation "h"
+      (master_mixer)
+      (for volume_data in sink_inputs
+        (mixer_row :data volume_data)))))
 
 (defwidget sound []
   (button
     :class "bottom-bar-hover"
+    :onclick "eww open --toggle volume_mixer"
     (image
-      :image-width 26
-      :image-height 26
+      :image-width 20
+      :image-height 20
       :path {is_system_muted == "false" ?
         "./assets/sound_icon.png" :
         "./assets/sound_muted_icon.png"})))

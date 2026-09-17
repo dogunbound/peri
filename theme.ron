@@ -3,7 +3,7 @@
         border_width: 4,
         margin: 2,
         workspace_margin: 0,
-        default_border_color: "#f6e2e1",
-        focused_border_color: "#ffb3b0",
-        background_color: "#081A1B"
+        default_border_color: "#ffece6",
+        focused_border_color: "#ffb3a3",
+        background_color: "#031100"
 )

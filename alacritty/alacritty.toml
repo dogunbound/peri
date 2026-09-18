@@ -1,0 +1,5 @@
+[general]
+import = [ "~/.config/alacritty/themes/peri.toml" ]
+
+[mouse]
+hide_when_typing = true

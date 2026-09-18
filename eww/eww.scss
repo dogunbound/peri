@@ -2,12 +2,12 @@
   all: unset;
 }
 
-$background: #0c0d1a;
-$black: #0c0d1a;
-$focus: #ffb3a3;
-$text: #ffece6;
-$hover: #9591b9;
-$busy: #716f9a;
+$background: #29293e;
+$black: #0d0c1e;
+$focus: #ff828d;
+$text: #ffdadf;
+$hover: #7c7cbf;
+$busy: #52527c;
 
 * {
   font-family: 'Source Code Pro', 'DejaVu Sans Mono', 'Noto Sans Mono', 'JetBrains Mono', 'Liberation Mono', monospace;
@@ -89,7 +89,7 @@ calendar:indeterminate {
 }
 
 .mixer-scale trough {
-  background-color: #1e203a;
+  background-color: $black;
 }
 
 .mixer-scale highlight {

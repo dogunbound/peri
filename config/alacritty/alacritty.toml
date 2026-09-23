@@ -1,5 +1,5 @@
 [general]
-import = [ "~/.config/alacritty/themes/peri.toml" ]
+import = [ "~/.config/alacritty/themes/dracula.toml" ]
 
 [mouse]
 hide_when_typing = true

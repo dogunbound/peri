@@ -35,9 +35,9 @@ else
 fi
 
 if ! command -v python3 >/dev/null 2>&1; then
-  echo "python3 could not be found. Please install it (python3 on Debian/Ubuntu, python on Arch) for the calendar popup" >>$HOME/LEFTWM-THEME-PERI-WARN
+  echo "python3 could not be found. Please install it (python3 on Debian/Ubuntu, python on Arch) for the calendar and volume mixer popups" >>$HOME/LEFTWM-THEME-PERI-WARN
 elif ! python3 -c 'import gi; gi.require_version("Gtk", "3.0"); from gi.repository import Gtk' >/dev/null 2>&1; then
-  echo "Python GTK bindings could not be found. Please install them (python3-gi and gir1.2-gtk-3.0 on Debian/Ubuntu, python-gobject on Arch) for the calendar popup" >>$HOME/LEFTWM-THEME-PERI-WARN
+  echo "Python GTK bindings could not be found. Please install them (python3-gi and gir1.2-gtk-3.0 on Debian/Ubuntu, python-gobject on Arch) for the calendar and volume mixer popups" >>$HOME/LEFTWM-THEME-PERI-WARN
 fi
 
 leftwm command "LoadTheme $SCRIPTPATH/theme.ron"

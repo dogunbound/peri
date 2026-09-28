@@ -101,3 +101,55 @@ calendar:indeterminate {
   min-width: 12px;
   min-height: 12px;
 }
+
+.tray {
+  padding: 4px 0px;
+}
+
+.tray > *:hover {
+  background-color: $hover;
+}
+
+menu {
+  background-color: $background;
+  border: solid 4px $text;
+  padding: 4px;
+  color: $text;
+}
+
+menu menuitem {
+  padding: 4px 8px;
+}
+
+menu menuitem:hover {
+  background-color: $hover;
+}
+
+menu menuitem:disabled {
+  color: rgba($text, 0.5);
+}
+
+menu separator {
+  background-color: $busy;
+  min-height: 2px;
+  margin: 4px 0px;
+}
+
+menu check,
+menu radio {
+  min-width: 12px;
+  min-height: 12px;
+  margin-right: 8px;
+  border: solid 2px $text;
+}
+
+menu check:checked,
+menu radio:checked {
+  background-color: $focus;
+}
+
+menu arrow {
+  min-width: 12px;
+  min-height: 12px;
+  -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
+}

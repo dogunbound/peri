@@ -128,10 +128,20 @@
       (box hour)
       (box min))))
 
+; System Tray
+(defwidget tray []
+  (systray
+    :class "tray"
+    :orientation "v"
+    :spacing 4
+    :icon-size 20
+    :prepend-new true))
+
 ; Bottom bar 
 (defwidget bottom_bar []
   (box
     :valign "end"
     :orientation "v"
+    (tray)
     (sound)
     (time)))

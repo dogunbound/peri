@@ -51,23 +51,6 @@ $busy: #52527c;
   background-color: $hover;
 }
 
-.calendar-window {
-  background-color: $background;
-  border: solid 4px $text;
-}
-
-calendar {
-  color: $text;
-}
-
-calendar:selected {
-  color: $focus;
-}
-
-calendar:indeterminate {
-  color: rgba($text, 0.5);
-}
-
 .volume-mixer-window {
   background-color: $background;
   border: solid 4px $text;

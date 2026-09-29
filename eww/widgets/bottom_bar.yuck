@@ -9,8 +9,8 @@
       :image-width 20
       :image-height 20
       :path {is_system_muted == "false" ?
-        "./assets/sound_icon.png" :
-        "./assets/sound_muted_icon.png"})))
+        "./assets/sound_icon.svg" :
+        "./assets/sound_muted_icon.svg"})))
 
 ; Battery Widget
 ; EWW_BATTERY is built into eww and updates every couple of seconds. total_avg
@@ -23,12 +23,12 @@
       :image-width 20
       :image-height 20
       :path {jq(EWW_BATTERY, '[.[] | .status?] | any(. == "Charging")') ?
-        "./assets/battery_charging_icon.png" :
+        "./assets/battery_charging_icon.svg" :
         round(EWW_BATTERY.total_avg, 0) < 15 ?
-        "./assets/battery_empty_icon.png" :
+        "./assets/battery_empty_icon.svg" :
         round(EWW_BATTERY.total_avg, 0) <= 50 ?
-        "./assets/battery_low_icon.png" :
-        "./assets/battery_icon.png"})))
+        "./assets/battery_low_icon.svg" :
+        "./assets/battery_icon.svg"})))
 
 ; Clock Widget
 (defpoll hour :interval "1s" "date '+%H'")

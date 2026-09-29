@@ -88,7 +88,7 @@ def get_sink_inputs():
 
 
 def mute_icon(muted):
-    name = "sound_muted_icon.png" if muted else "sound_icon.png"
+    name = "sound_muted_icon.svg" if muted else "sound_icon.svg"
     pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(os.path.join(ASSETS, name), 20, 20)
     return Gtk.Image.new_from_pixbuf(pixbuf)
 

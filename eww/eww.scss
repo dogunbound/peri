@@ -102,3 +102,10 @@ menu arrow {
   min-height: 12px;
   -gtk-icon-source: -gtk-icontheme("pan-end-symbolic");
 }
+
+tooltip {
+  background-color: $background;
+  border: solid 2px $text;
+  padding: 4px;
+  color: $text;
+}

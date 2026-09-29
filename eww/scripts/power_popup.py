@@ -2,7 +2,6 @@
 # Power menu popup for the power icon on the bar: shutdown, lock, sleep,
 # logout and restart in a row
 import os
-import shutil
 import subprocess
 
 import gi
@@ -31,19 +30,13 @@ CSS = """
 """
 
 
-def lock():
-    if shutil.which("dm-tool"):
-        return ["dm-tool", "lock"]
-    return ["loginctl", "lock-session"]
-
-
 def logout():
     return ["loginctl", "terminate-session", os.environ.get("XDG_SESSION_ID", "")]
 
 
 ACTIONS = [
     ("shutdown_icon.svg", lambda: ["systemctl", "poweroff"]),
-    ("lock_icon.svg", lock),
+    ("lock_icon.svg", lambda: ["dm-tool", "lock"]),
     ("sleep_icon.svg", lambda: ["systemctl", "suspend"]),
     ("logout_icon.svg", logout),
     ("restart_icon.svg", lambda: ["systemctl", "reboot"]),

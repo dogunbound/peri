@@ -30,7 +30,7 @@
         (command: SoftReload, value: "", modifier: ["modkey", "Shift"], key: "r"),
         (command: HardReload, value: "", modifier: ["modkey", "Shift", "Control"], key: "r"),
         (command: Execute, value: "loginctl kill-session $XDG_SESSION_ID", modifier: ["modkey", "Shift"], key: "x"),
-        (command: Execute, value: "slock", modifier: ["modkey", "Control"], key: "l"),
+        (command: Execute, value: "dm-tool lock", modifier: ["modkey", "Control"], key: "l"),
         (command: MoveToLastWorkspace, value: "", modifier: ["modkey", "Shift"], key: "w"),
         (command: SwapTags, value: "", modifier: ["modkey"], key: "w"),
         (command: MoveWindowUp, value: "", modifier: ["modkey", "Shift"], key: "k"),

@@ -12,6 +12,24 @@
         "./assets/sound_icon.png" :
         "./assets/sound_muted_icon.png"})))
 
+; Battery Widget
+; EWW_BATTERY is built into eww and updates every couple of seconds. total_avg
+; is the charge across all batteries; the icon shows charging if any battery is
+(defwidget battery []
+  (box
+    :visible {jq(EWW_BATTERY, 'length') > 0}
+    :tooltip "${round(EWW_BATTERY.total_avg, 0)}%"
+    (image
+      :image-width 20
+      :image-height 20
+      :path {jq(EWW_BATTERY, '[.[] | .status?] | any(. == "Charging")') ?
+        "./assets/battery_charging_icon.png" :
+        round(EWW_BATTERY.total_avg, 0) < 15 ?
+        "./assets/battery_empty_icon.png" :
+        round(EWW_BATTERY.total_avg, 0) <= 50 ?
+        "./assets/battery_low_icon.png" :
+        "./assets/battery_icon.png"})))
+
 ; Clock Widget
 (defpoll hour :interval "1s" "date '+%H'")
 (defpoll min :interval "1s" "date '+%M'")
@@ -39,6 +57,7 @@
   (box
     :valign "end"
     :orientation "v"
+    (battery)
     (tray)
     (sound)
     (time)))

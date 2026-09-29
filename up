@@ -47,10 +47,21 @@ if find_cmd python3 >/dev/null && ! python3 -c 'import gi; gi.require_version("G
   echo "Python GTK bindings could not be found. Please install them (python3-gi and gir1.2-gtk-3.0 on Debian/Ubuntu, python-gobject on Arch) for the calendar, volume mixer and power popups" >>"$WARN_FILE"
 fi
 
+if find_cmd python3 >/dev/null; then
+  if ! python3 -c 'import gi; gi.require_version("GdkPixbuf", "2.0"); from gi.repository import GdkPixbuf' >/dev/null 2>&1; then
+    echo "GdkPixbuf Python bindings could not be found. Please install them (gir1.2-gdkpixbuf-2.0 on Debian/Ubuntu, gdk-pixbuf2 on Arch) for the volume mixer and power popups" >>"$WARN_FILE"
+  elif ! python3 -c 'import sys, gi; gi.require_version("GdkPixbuf", "2.0"); from gi.repository import GdkPixbuf; GdkPixbuf.Pixbuf.new_from_file_at_size(sys.argv[1], 20, 20)' "$SCRIPTPATH/eww/assets/power_icon.svg" >/dev/null 2>&1; then
+    echo "SVG support for GdkPixbuf could not be found. Please install it (librsvg2-common on Debian/Ubuntu, librsvg on Arch) for the bar icons and popups" >>"$WARN_FILE"
+  fi
+fi
+
 warn_missing pactl "Please install it (pulseaudio-utils or pipewire-pulse on Debian/Ubuntu, libpulse or pipewire-pulse on Arch) for the volume mixer and mute icon"
 warn_missing dm-tool "Some features may not work: the power menu lock button needs a LightDM session and falls back to loginctl lock-session, which requires a screen locker listening for it"
 warn_missing loginctl "Some features may not work: the power menu logout button and lock fallback need systemd-logind"
 warn_missing systemctl "Some features may not work: the power menu shutdown, sleep and restart buttons need systemd"
+warn_missing alacritty "Please install it for the Mod+Shift+Return terminal keybind"
+warn_missing rofi "Please install it for the Mod+p launcher keybind"
+warn_missing slock "Please install it for the Mod+Ctrl+l lock keybind"
 
 leftwm command "LoadTheme $SCRIPTPATH/theme.ron"
 leftwm command "LoadTheme $SCRIPTPATH/theme.toml"

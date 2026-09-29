@@ -14,31 +14,43 @@ export XDG_CONFIG_HOME=~/.config/
 
 EWW_DATA_DIRS="$SCRIPTPATH/eww/assets:${XDG_DATA_DIRS:-/usr/local/share:/usr/share}"
 
-if command -v eww >/dev/null 2>&1; then
-  XDG_DATA_DIRS=$EWW_DATA_DIRS eww daemon &
-  eww open peri_bar
-elif command -v /usr/bin/eww >/dev/null 2>&1; then
-  XDG_DATA_DIRS=$EWW_DATA_DIRS /usr/bin/eww daemon &
-  /usr/bin/eww open peri_bar
+WARN_FILE="$HOME/LEFTWM-THEME-PERI-WARN"
+
+# Prints the path to a command, checking /usr/bin in case PATH is minimal
+find_cmd() {
+  command -v "$1" 2>/dev/null || { [ -x "/usr/bin/$1" ] && echo "/usr/bin/$1"; }
+}
+
+# warn_missing <command> <message>
+warn_missing() {
+  find_cmd "$1" >/dev/null || echo "$1 could not be found. $2" >>"$WARN_FILE"
+}
+
+EWW="$(find_cmd eww)"
+if [ -n "$EWW" ]; then
+  XDG_DATA_DIRS=$EWW_DATA_DIRS "$EWW" daemon &
+  "$EWW" open peri_bar
 else
-  echo "eww could not be found. Please symlink the eww binary into /usr/bin/" >>$HOME/LEFTWM-THEME-PERI-WARN
+  warn_missing eww "Please symlink the eww binary into /usr/bin/"
 fi
 
-if command -v nm-applet >/dev/null 2>&1; then
+NM_APPLET="$(find_cmd nm-applet)"
+if [ -n "$NM_APPLET" ]; then
   pkill -x nm-applet
-  nm-applet --indicator &
-elif command -v /usr/bin/nm-applet >/dev/null 2>&1; then
-  pkill -x nm-applet
-  /usr/bin/nm-applet --indicator &
+  "$NM_APPLET" --indicator &
 else
-  echo "nm-applet could not be found. Please install it (network-manager-gnome on Debian/Ubuntu, network-manager-applet on Arch/Fedora) for the network tray icon" >>$HOME/LEFTWM-THEME-PERI-WARN
+  warn_missing nm-applet "Please install it (network-manager-gnome on Debian/Ubuntu, network-manager-applet on Arch/Fedora) for the network tray icon"
 fi
 
-if ! command -v python3 >/dev/null 2>&1; then
-  echo "python3 could not be found. Please install it (python3 on Debian/Ubuntu, python on Arch) for the calendar and volume mixer popups" >>$HOME/LEFTWM-THEME-PERI-WARN
-elif ! python3 -c 'import gi; gi.require_version("Gtk", "3.0"); from gi.repository import Gtk' >/dev/null 2>&1; then
-  echo "Python GTK bindings could not be found. Please install them (python3-gi and gir1.2-gtk-3.0 on Debian/Ubuntu, python-gobject on Arch) for the calendar and volume mixer popups" >>$HOME/LEFTWM-THEME-PERI-WARN
+warn_missing python3 "Please install it (python3 on Debian/Ubuntu, python on Arch) for the calendar, volume mixer and power popups"
+if find_cmd python3 >/dev/null && ! python3 -c 'import gi; gi.require_version("Gtk", "3.0"); from gi.repository import Gtk' >/dev/null 2>&1; then
+  echo "Python GTK bindings could not be found. Please install them (python3-gi and gir1.2-gtk-3.0 on Debian/Ubuntu, python-gobject on Arch) for the calendar, volume mixer and power popups" >>"$WARN_FILE"
 fi
+
+warn_missing pactl "Please install it (pulseaudio-utils or pipewire-pulse on Debian/Ubuntu, libpulse or pipewire-pulse on Arch) for the volume mixer and mute icon"
+warn_missing dm-tool "Some features may not work: the power menu lock button needs a LightDM session and falls back to loginctl lock-session, which requires a screen locker listening for it"
+warn_missing loginctl "Some features may not work: the power menu logout button and lock fallback need systemd-logind"
+warn_missing systemctl "Some features may not work: the power menu shutdown, sleep and restart buttons need systemd"
 
 leftwm command "LoadTheme $SCRIPTPATH/theme.ron"
 leftwm command "LoadTheme $SCRIPTPATH/theme.toml"

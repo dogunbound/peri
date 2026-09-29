@@ -43,6 +43,16 @@
       (box hour)
       (box min))))
 
+; Power Widget
+(defwidget power []
+  (button
+    :class "bottom-bar-hover"
+    :onclick "./scripts/power_popup.py &"
+    (image
+      :image-width 20
+      :image-height 20
+      :path "./assets/power_icon.svg")))
+
 ; System Tray
 (defwidget tray []
   (systray
@@ -60,4 +70,5 @@
     (battery)
     (tray)
     (sound)
-    (time)))
+    (time)
+    (power)))

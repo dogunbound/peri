@@ -3,7 +3,7 @@
 
 (defwidget sound []
   (button
-    :class "bottom-bar-hover"
+    :class "volume-icon bottom-bar-hover"
     :onclick "./scripts/volume_mixer_popup.py &"
     (image
       :image-width 20
@@ -46,7 +46,7 @@
 ; Power Widget
 (defwidget power []
   (button
-    :class "bottom-bar-hover"
+    :class "power-icon bottom-bar-hover"
     :onclick "./scripts/power_popup.py &"
     (image
       :image-width 20
@@ -58,8 +58,8 @@
   (systray
     :class "tray"
     :orientation "v"
-    :spacing 4
     :icon-size 20
+    :space-evenly true
     :prepend-new true))
 
 ; Bottom bar 
@@ -67,6 +67,7 @@
   (box
     :valign "end"
     :orientation "v"
+    :space-evenly false
     (battery)
     (tray)
     (sound)

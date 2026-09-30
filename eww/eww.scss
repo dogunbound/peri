@@ -51,12 +51,20 @@ $busy: #52527c;
   background-color: $hover;
 }
 
-.tray {
-  padding: 4px 0px;
+.tray>*:hover {
+  background-color: $hover;
 }
 
-.tray > *:hover {
-  background-color: $hover;
+.tray>* {
+  padding: 8px 0px;
+}
+
+.power-icon {
+  padding: 8px 0px;
+}
+
+.volume-icon {
+  padding: 8px 0px;
 }
 
 menu {

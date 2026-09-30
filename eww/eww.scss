@@ -55,8 +55,8 @@ $busy: #52527c;
   background-color: $hover;
 }
 
-.tray>* {
-  padding: 8px 0px;
+.tray>*>* {
+  padding: 4px 0px;
 }
 
 .power-icon {

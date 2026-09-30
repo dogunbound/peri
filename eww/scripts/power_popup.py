@@ -8,13 +8,16 @@ import popup
 from popup import Gtk
 
 CSS = """
+window {
+  border: none;
+}
+
 .power-menu {
-  padding: 4px;
+  border: solid 4px $text;
 }
 
 .power-button {
   padding: 8px;
-  margin: 2px;
 }
 
 .power-button:hover {

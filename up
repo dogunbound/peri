@@ -42,18 +42,15 @@ else
   warn_missing nm-applet "Please install it (network-manager-gnome on Debian/Ubuntu, network-manager-applet on Arch/Fedora) for the network tray icon"
 fi
 
-FEH="$(find_cmd feh)"
-if [ -n "$FEH" ]; then
+if find_cmd feh >/dev/null; then
   "$SCRIPTPATH/wallpaper.sh" >/dev/null 2>&1 &
 fi
 
 warn_missing python3 "Please install it (python3 on Debian/Ubuntu, python on Arch) for the calendar, volume mixer and power popups"
-if find_cmd python3 >/dev/null && ! python3 -c 'import gi; gi.require_version("Gtk", "3.0"); from gi.repository import Gtk' >/dev/null 2>&1; then
-  echo "Python GTK bindings could not be found. Please install them (python3-gi and gir1.2-gtk-3.0 on Debian/Ubuntu, python-gobject on Arch) for the calendar, volume mixer and power popups" >>"$WARN_FILE"
-fi
-
 if find_cmd python3 >/dev/null; then
-  if ! python3 -c 'import gi; gi.require_version("GdkPixbuf", "2.0"); from gi.repository import GdkPixbuf' >/dev/null 2>&1; then
+  if ! python3 -c 'import gi; gi.require_version("Gtk", "3.0"); from gi.repository import Gtk' >/dev/null 2>&1; then
+    echo "Python GTK bindings could not be found. Please install them (python3-gi and gir1.2-gtk-3.0 on Debian/Ubuntu, python-gobject on Arch) for the calendar, volume mixer and power popups" >>"$WARN_FILE"
+  elif ! python3 -c 'import gi; gi.require_version("GdkPixbuf", "2.0"); from gi.repository import GdkPixbuf' >/dev/null 2>&1; then
     echo "GdkPixbuf Python bindings could not be found. Please install them (gir1.2-gdkpixbuf-2.0 on Debian/Ubuntu, gdk-pixbuf2 on Arch) for the volume mixer and power popups" >>"$WARN_FILE"
   elif ! python3 -c 'import sys, gi; gi.require_version("GdkPixbuf", "2.0"); from gi.repository import GdkPixbuf; GdkPixbuf.Pixbuf.new_from_file_at_size(sys.argv[1], 20, 20)' "$SCRIPTPATH/eww/assets/power_icon.svg" >/dev/null 2>&1; then
     echo "SVG support for GdkPixbuf could not be found. Please install it (librsvg2-common on Debian/Ubuntu, librsvg on Arch) for the bar icons and popups" >>"$WARN_FILE"

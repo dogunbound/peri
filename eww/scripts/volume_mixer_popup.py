@@ -2,18 +2,10 @@
 # Volume mixer popup for the sound icon on the bar: one column for the default
 # sink ("Master") and one per application playing audio
 import json
-import os
 import subprocess
-
-import gi
-
-gi.require_version("GdkPixbuf", "2.0")
-from gi.repository import GdkPixbuf
 
 import popup
 from popup import Gtk
-
-ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets")
 
 CSS = """
 .volume-mixer {
@@ -25,7 +17,7 @@ CSS = """
 }
 
 .mixer-name {
-  color: #ffdadf;
+  color: $text;
 }
 
 .mixer-scale {
@@ -35,21 +27,21 @@ CSS = """
 }
 
 .mixer-scale trough {
-  background-color: #0d0c1e;
+  background-color: $black;
 }
 
 .mixer-scale highlight {
-  background-color: #7c7cbf;
+  background-color: $hover;
 }
 
 .mixer-scale slider {
-  background-color: #ffdadf;
+  background-color: $text;
   min-width: 12px;
   min-height: 12px;
 }
 
 .mixer-mute:hover {
-  background-color: #7c7cbf;
+  background-color: $hover;
 }
 """
 
@@ -88,9 +80,7 @@ def get_sink_inputs():
 
 
 def mute_icon(muted):
-    name = "sound_muted_icon.svg" if muted else "sound_icon.svg"
-    pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(os.path.join(ASSETS, name), 20, 20)
-    return Gtk.Image.new_from_pixbuf(pixbuf)
+    return popup.icon("sound_muted_icon.svg" if muted else "sound_icon.svg")
 
 
 # Name written top to bottom, one character per line, cut to 12 characters
@@ -105,17 +95,14 @@ def mixer_row(name, volume, muted, set_volume, toggle_mute):
     scale.set_value(volume)
     scale.connect("value-changed", lambda s: set_volume(int(s.get_value())))
 
-    button = Gtk.Button()
+    button = Gtk.Button(image=mute_icon(muted))
     button.get_style_context().add_class("mixer-mute")
-    button.add(mute_icon(muted))
 
     def on_click(_):
         nonlocal muted
         muted = not muted
         toggle_mute()
-        button.get_child().destroy()
-        button.add(mute_icon(muted))
-        button.show_all()
+        button.set_image(mute_icon(muted))
 
     button.connect("clicked", on_click)
 
@@ -133,23 +120,23 @@ def mixer_row(name, volume, muted, set_volume, toggle_mute):
 mixer = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL, homogeneous=True)
 mixer.get_style_context().add_class("volume-mixer")
 
-volume, muted = get_master()
+master_volume, master_muted = get_master()
 mixer.add(
     mixer_row(
         "Master",
-        volume,
-        muted,
+        master_volume,
+        master_muted,
         lambda v: pactl("set-sink-volume", "@DEFAULT_SINK@", f"{v}%"),
         lambda: pactl("set-sink-mute", "@DEFAULT_SINK@", "toggle"),
     )
 )
 
-for index, name, volume, muted in get_sink_inputs():
+for index, name, input_volume, input_muted in get_sink_inputs():
     mixer.add(
         mixer_row(
             name,
-            volume,
-            muted,
+            input_volume,
+            input_muted,
             lambda v, i=index: pactl("set-sink-input-volume", str(i), f"{v}%"),
             lambda i=index: pactl("set-sink-input-mute", str(i), "toggle"),
         )

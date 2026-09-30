@@ -1,5 +1,4 @@
 #!/bin/bash
-shopt -s nocasematch
 
 print_mute_state() {
   if pactl get-sink-mute @DEFAULT_SINK@ 2>/dev/null | grep -q "Mute: yes"; then
@@ -23,7 +22,8 @@ emit_if_changed() {
 while :; do
   emit_if_changed
   while read -r line; do
-    if [[ $line == *sink* && $line != *sink*input* ]]; then
+    # Sink changes, or the default sink switching ("on server")
+    if [[ $line == *" on sink #"* || $line == *" on server" ]]; then
       emit_if_changed
     fi
   done < <(pactl subscribe 2>/dev/null)

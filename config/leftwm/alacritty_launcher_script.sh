@@ -1,13 +1,18 @@
 #!/bin/bash
 
+ALACRITTY="$(command -v alacritty || echo /usr/bin/alacritty)"
+
 # 1. Get the ID of the currently focused window
 WIN_ID=$(xprop -root _NET_ACTIVE_WINDOW | awk '{print $5}')
 
 # 2. Get the PID of the Alacritty GUI process
-ALACRITTY_PID=$(xprop -id "$WIN_ID" _NET_WM_PID | awk '{print $3}')
+ALACRITTY_PID=""
+if [ -n "$WIN_ID" ] && [ "$WIN_ID" != "0x0" ]; then
+    ALACRITTY_PID=$(xprop -id "$WIN_ID" _NET_WM_PID | awk '{print $3}')
+fi
 
 if [ -n "$ALACRITTY_PID" ] && ps -p "$ALACRITTY_PID" -o comm= | grep -q "alacritty"; then
-    
+
     # 3. FIND THE SHELL: Find the child process of Alacritty
     # pgrep -P looks for processes whose parent is the Alacritty PID
     # We take the first child (the shell)
@@ -21,8 +26,8 @@ if [ -n "$ALACRITTY_PID" ] && ps -p "$ALACRITTY_PID" -o comm= | grep -q "alacrit
         CWD=$(readlink -f "/proc/$ALACRITTY_PID/cwd")
     fi
 
-    /usr/bin/alacritty --working-directory "$CWD" &
+    "$ALACRITTY" --working-directory "$CWD" &
 else
     # Fallback: If Alacritty isn't focused, just launch a normal instance
-    /usr/bin/alacritty &
+    "$ALACRITTY" &
 fi

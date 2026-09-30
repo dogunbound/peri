@@ -7,6 +7,9 @@ SCRIPTPATH="$(
 
 leftwm command "UnloadTheme"
 
+[ -f /tmp/leftwm-theme-peri-wallpaper.pid ] && kill "$(cat /tmp/leftwm-theme-peri-wallpaper.pid)" 2>/dev/null
+rm -f /tmp/leftwm-theme-peri-wallpaper.pid
+
 if command -v eww >/dev/null 2>&1; then
   eww kill &
 elif command -v /usr/bin/eww >/dev/null 2>&1; then

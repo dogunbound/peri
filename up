@@ -42,6 +42,11 @@ else
   warn_missing nm-applet "Please install it (network-manager-gnome on Debian/Ubuntu, network-manager-applet on Arch/Fedora) for the network tray icon"
 fi
 
+FEH="$(find_cmd feh)"
+if [ -n "$FEH" ]; then
+  "$SCRIPTPATH/wallpaper.sh" >/dev/null 2>&1 &
+fi
+
 warn_missing python3 "Please install it (python3 on Debian/Ubuntu, python on Arch) for the calendar, volume mixer and power popups"
 if find_cmd python3 >/dev/null && ! python3 -c 'import gi; gi.require_version("Gtk", "3.0"); from gi.repository import Gtk' >/dev/null 2>&1; then
   echo "Python GTK bindings could not be found. Please install them (python3-gi and gir1.2-gtk-3.0 on Debian/Ubuntu, python-gobject on Arch) for the calendar, volume mixer and power popups" >>"$WARN_FILE"

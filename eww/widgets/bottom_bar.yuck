@@ -59,7 +59,7 @@
     :class "tray"
     :orientation "v"
     :icon-size 20
-    :space-evenly true
+    :space-evenly false
     :prepend-new true))
 
 ; Bottom bar 

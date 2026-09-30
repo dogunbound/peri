@@ -3,7 +3,7 @@
 
 (defwidget sound []
   (button
-    :class "volume-icon bottom-bar-hover"
+    :class "bar-icon bottom-bar-hover"
     :onclick "./scripts/volume_mixer_popup.py &"
     (image
       :image-width 20
@@ -15,6 +15,7 @@
 ; Battery Widget
 ; EWW_BATTERY is built into eww and updates every couple of seconds. total_avg
 ; is the charge across all batteries; the icon shows charging if any battery is
+; charging.
 (defwidget battery []
   (box
     :visible {jq(EWW_BATTERY, 'length') > 0}
@@ -31,22 +32,19 @@
         "./assets/battery_icon.svg"})))
 
 ; Clock Widget
-(defpoll hour :interval "1s" "date '+%H'")
-(defpoll min :interval "1s" "date '+%M'")
-
 (defwidget time []
   (button
     :class "bottom-bar-hover"
     :onclick "./scripts/calendar_popup.py &"
     (box
       :orientation "v"
-      (box hour)
-      (box min))))
+      (box {formattime(EWW_TIME, "%H")})
+      (box {formattime(EWW_TIME, "%M")}))))
 
 ; Power Widget
 (defwidget power []
   (button
-    :class "power-icon bottom-bar-hover"
+    :class "bar-icon bottom-bar-hover"
     :onclick "./scripts/power_popup.py &"
     (image
       :image-width 20
@@ -62,7 +60,7 @@
     :space-evenly false
     :prepend-new true))
 
-; Bottom bar 
+; Bottom bar
 (defwidget bottom_bar []
   (box
     :valign "end"

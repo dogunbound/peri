@@ -1,17 +1,28 @@
 # Shared code for the bar popups. They close on any click outside of them (or
 # Escape), like a tray menu. eww windows can't grab the pointer, so each popup
 # runs as its own GTK window and grabs the pointer while it is open.
+import os
+import re
+from string import Template
+
 import gi
 
 gi.require_version("Gtk", "3.0")
 gi.require_version("Gdk", "3.0")
-from gi.repository import Gdk, GLib, Gtk
+gi.require_version("GdkPixbuf", "2.0")
+from gi.repository import Gdk, GdkPixbuf, GLib, Gtk
+
+ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "assets")
 
 # Same position the eww popups used: 42px from the left, 2px from the bottom
 X_OFFSET = 42
 Y_OFFSET = 2
 
-# Colors match eww.scss
+# Colors come from the "$name: #hex;" lines in eww.scss. Popup CSS refers to
+# them as $name
+with open(os.path.join(ASSETS, "..", "eww.scss")) as scss:
+    PALETTE = dict(re.findall(r"^\$(\w+):\s*(#[0-9a-fA-F]+);", scss.read(), re.M))
+
 BASE_CSS = """
 * {
   all: unset;
@@ -21,10 +32,17 @@ BASE_CSS = """
 }
 
 window {
-  background-color: #29293e;
-  border: solid 4px #ffdadf;
+  background-color: $background;
+  border: solid 4px $text;
 }
 """
+
+
+def icon(name, size=20):
+    pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size(
+        os.path.join(ASSETS, name), size, size
+    )
+    return Gtk.Image.new_from_pixbuf(pixbuf)
 
 
 def grab_pointer(window):
@@ -53,7 +71,7 @@ def on_key_press(window, event):
 
 def run(child, css):
     provider = Gtk.CssProvider()
-    provider.load_from_data((BASE_CSS + css).encode())
+    provider.load_from_data(Template(BASE_CSS + css).substitute(PALETTE).encode())
     Gtk.StyleContext.add_provider_for_screen(
         Gdk.Screen.get_default(), provider, Gtk.STYLE_PROVIDER_PRIORITY_USER
     )

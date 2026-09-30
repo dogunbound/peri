@@ -7,6 +7,7 @@ SCRIPTPATH="$(
 )"
 DIR="$SCRIPTPATH/wallpapers"
 PIDFILE="/tmp/leftwm-theme-peri-wallpaper.pid"
+FEH="$(command -v feh || echo /usr/bin/feh)"
 
 if [ "$1" = "stop" ]; then
   [ -f "$PIDFILE" ] && kill "$(cat "$PIDFILE")" 2>/dev/null
@@ -25,7 +26,7 @@ while true; do
   if [ "${#IMAGES[@]}" -eq 0 ]; then
     exit 0
   fi
-  feh --no-fehbg --randomize --bg-fill "${IMAGES[@]}"
+  "$FEH" --no-fehbg --randomize --bg-fill "${IMAGES[@]}"
   # Only a single image: nothing to cycle
   [ "${#IMAGES[@]}" -eq 1 ] && exit 0
   sleep "$INTERVAL"

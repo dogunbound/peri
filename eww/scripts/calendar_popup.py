@@ -5,12 +5,12 @@ from popup import Gtk
 
 CSS = """
 calendar {
-  color: #ffdadf;
+  color: $text;
   padding: 4px;
 }
 
 calendar:selected {
-  color: #ff828d;
+  color: $focus;
 }
 
 calendar:indeterminate {
@@ -18,7 +18,7 @@ calendar:indeterminate {
 }
 
 calendar.button:hover {
-  color: #7c7cbf;
+  color: $hover;
 }
 """
 

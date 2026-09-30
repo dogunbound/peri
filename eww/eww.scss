@@ -20,9 +20,12 @@ $busy: #52527c;
   border: solid 4px $text;
   border-left: none;
   background-color: $background;
-  padding: 2px;
   margin: 2px;
   color: $text
+}
+
+.top-bar {
+  padding: 2px;
 }
 
 .workspace {

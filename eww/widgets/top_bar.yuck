@@ -5,5 +5,5 @@
     :content wm-tags))
 
 (defwidget top_bar []
-  (box (workspaces)))
+  (box :class "top-bar" (workspaces)))
 

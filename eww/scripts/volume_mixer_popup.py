@@ -85,7 +85,7 @@ def mute_icon(muted):
 
 # Name written top to bottom, one character per line, cut to 12 characters
 def mixer_row(name, volume, muted, set_volume, toggle_mute):
-    label = Gtk.Label(label="\n".join(name[:12]), valign=Gtk.Align.START)
+    label = Gtk.Label(label="\n".join(name[:8]), valign=Gtk.Align.START)
     label.get_style_context().add_class("mixer-name")
 
     scale = Gtk.Scale.new_with_range(Gtk.Orientation.VERTICAL, 0, 100, 1)

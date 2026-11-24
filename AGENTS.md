@@ -1,5 +1,7 @@
 # Peri LeftWM theme
 
+- You MUST update this file whenever your changes invalidate its contents or add a feature large enough to warrant a write-up for future agents. Keep this file brief so future agents can quickly find what they need without digging through the codebase.
+
 ## Runtime
 - `up` activates the theme: it runs the previous theme's teardown, symlinks `down` into `/tmp` and `eww/` to `~/.config/eww`, starts EWW and `nm-applet`, then loads `theme.ron`. Never run it as a test; it changes the active desktop and can kill EWW.
 - `down` unloads the theme and kills EWW. `bash config/setup_config.sh all` installs both LeftWM and Alacritty configs; use `leftwm` or `alacritty` for one. It replaces matching files under `~/.config` with symlinks, so test it only with a temporary `HOME`.
